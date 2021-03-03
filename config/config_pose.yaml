@@ -12,9 +12,7 @@ weights: {
     "mustard":"package://dope/weights/mustard_60.pth",
     "soup":"package://dope/weights/soup_60.pth",
     "sugar":"package://dope/weights/sugar_60.pth",
-    "bleach":"package://dope/weights/bleach_28_dr.pth"
-    
-    # NEW OBJECTS - HOPE
+    "bleach":"package://dope/weights/bleach_28_dr.pth",
     "AlphabetSoup":"package://dope/weights/AlphabetSoup.pth", 
     "BBQSauce":"package://dope/weights/BBQSauce.pth", 
     "Butter":"package://dope/weights/Butter.pth", 
@@ -55,8 +53,6 @@ dimensions: {
     "soup": [6.7659378051757813,10.185500144958496,6.771425724029541],
     "sugar": [9.267730712890625,17.625339508056641,4.5134143829345703],
     "bleach": [10.267730712890625,26.625339508056641,7.5134143829345703],
-
-    # new objects
     "AlphabetSoup" : [ 8.3555002212524414, 7.1121001243591309, 6.6055998802185059 ], 
     "Butter" : [ 5.282599925994873, 2.3935999870300293, 10.330100059509277 ], 
     "Ketchup" : [ 14.860799789428711, 4.3368000984191895, 6.4513998031616211 ],     
@@ -84,7 +80,7 @@ dimensions: {
     "GranolaBars" : [ 12.400600433349609, 3.8738000392913818, 16.53380012512207 ], 
     "Peaches" : [ 5.7781000137329102, 7.0961999893188477, 6.5925998687744141 ],
     "GreenBeans" : [ 5.758699893951416, 7.0608000755310059, 6.5732002258300781 ], 
-    "PeasAndCarrots" : [ 5.8512001037597656, 7.0636000633239746, 6.5918002128601074 ] 
+    "PeasAndCarrots" : [ 5.8512001037597656, 7.0636000633239746, 6.5918002128601074 ],
 }
 
 class_ids: {
@@ -122,7 +118,7 @@ class_ids: {
     "GranolaBars"       : 33, 
     "Peaches"           : 34,
     "GreenBeans"        : 35, 
-    "PeasAndCarrots"    : 36 
+    "PeasAndCarrots"    : 36,
 }
 
 draw_colors: {
