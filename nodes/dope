@@ -108,7 +108,7 @@ class DopeNode(object):
         self.prev_num_detections = 0
 
         self.input_is_rectified = rospy.get_param('~input_is_rectified', True)
-        self.downscale_height = rospy.get_param('~downscale_height', 500)
+        self.downscale_height = rospy.get_param('~downscale_height', 300)
 
         self.config_detect = lambda: None
         self.config_detect.mask_edges = 1
