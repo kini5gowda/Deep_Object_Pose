@@ -1,8 +1,8 @@
-topic_camera: "/xtion/image/image_raw"
+topic_camera: "/xtion/rgb/image_raw/compressed"
 topic_camera_info: "/xtion/image/camera_info"
 topic_publishing: "dope"
 input_is_rectified: True   # Whether the input image is rectified (strongly suggested!)
-downscale_height: 400      # if the input image is larger than this, scale it down to this pixel height
+downscale_height: 300      # if the input image is larger than this, scale it down to this pixel height
 
 # Comment any of these lines to prevent detection / pose estimation of that object
 weights: {
