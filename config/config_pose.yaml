@@ -1,4 +1,4 @@
-topic_camera: "/xtion/rgb/image_raw/compressed"
+topic_camera: "/xtion/rgb/image_raw"
 topic_camera_info: "/xtion/image/camera_info"
 topic_publishing: "dope"
 input_is_rectified: True   # Whether the input image is rectified (strongly suggested!)
