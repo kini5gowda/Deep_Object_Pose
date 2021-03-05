@@ -1,4 +1,4 @@
-#!/usr/bin/env python3
+#!/usr/bin/env python
 
 # Copyright (c) 2018 NVIDIA Corporation. All rights reserved.
 # This work is licensed under a Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International License.
@@ -105,10 +105,9 @@ class DopeNode(object):
         self.meshes = {}
         self.mesh_scales = {}
         self.cv_bridge = CvBridge()
-        self.prev_num_detections = 0
 
         self.input_is_rectified = rospy.get_param('~input_is_rectified', True)
-        self.downscale_height = rospy.get_param('~downscale_height', 300)
+        self.downscale_height = rospy.get_param('~downscale_height', 500)
 
         self.config_detect = lambda: None
         self.config_detect.mask_edges = 1
@@ -122,7 +121,7 @@ class DopeNode(object):
         self.config_detect.thresh_points = rospy.get_param("~thresh_points", 0.1)
 
         # For each object to detect, load network model, create PNP solver, and start ROS publishers
-        for model, weights_url in rospy.get_param('~weights').items():
+        for model, weights_url in rospy.get_param('~weights').iteritems():
             self.models[model] = \
                 ModelData(
                     model,
@@ -145,11 +144,8 @@ class DopeNode(object):
                 self.mesh_scales[model] = rospy.get_param('~mesh_scales')[model]
             except KeyError:
                 self.mesh_scales[model] = 1.0
-            try:
-                self.draw_colors[model] = tuple(rospy.get_param("~draw_colors")[model])
-            except:
-                self.draw_colors[model] = (np.random.randint(0,255),np.random.randint(0,255),np.random.randint(0,255))
 
+            self.draw_colors[model] = tuple(rospy.get_param("~draw_colors")[model])
             self.dimensions[model] = tuple(rospy.get_param("~dimensions")[model])
             self.class_ids[model] = rospy.get_param("~class_ids")[model]
 
@@ -176,12 +172,6 @@ class DopeNode(object):
             rospy.Publisher(
                 rospy.get_param('~topic_publishing') + "/rgb_points",
                 ImageSensor_msg,
-                queue_size=10
-            )
-        self.pub_camera_info = \
-            rospy.Publisher(
-                rospy.get_param('~topic_publishing') + "/camera_info",
-                CameraInfo,
                 queue_size=10
             )
         self.pub_detections = \
@@ -310,16 +300,25 @@ class DopeNode(object):
                     draw.draw_cube(points2d, self.draw_colors[m])
 
         # Publish the image with results overlaid
-        rgb_points_img = CvBridge().cv2_to_imgmsg(np.array(im)[..., ::-1], "bgr8")
-        rgb_points_img.header = camera_info.header
-        self.pub_rgb_dope_points.publish(rgb_points_img)
-        self.pub_camera_info.publish(camera_info)
+        self.pub_rgb_dope_points.publish(
+            CvBridge().cv2_to_imgmsg(
+                np.array(im)[..., ::-1],
+                "bgr8"
+            )
+        )
         self.pub_detections.publish(detection_array)
         self.publish_markers(detection_array)
 
     def publish_markers(self, detection_array):
+        # Delete all existing markers
+        markers = MarkerArray()
+        marker = Marker()
+        marker.action = Marker.DELETEALL
+        markers.markers.append(marker)
+        self.pub_markers.publish(markers)
+
         # Object markers
-        class_id_to_name = {class_id: name for name, class_id in self.class_ids.items()}
+        class_id_to_name = {class_id: name for name, class_id in self.class_ids.iteritems()}
         markers = MarkerArray()
         for i, det in enumerate(detection_array.detections):
             name = class_id_to_name[det.results[0].id]
@@ -379,15 +378,6 @@ class DopeNode(object):
             except KeyError:
                 # user didn't specify self.meshes[name], so don't publish marker
                 pass
-
-        for i in range(len(detection_array.detections), self.prev_num_detections):
-            for ns in ["bboxes", "texts", "meshes"]:
-                marker = Marker()
-                marker.action = Marker.DELETE
-                marker.ns = ns
-                marker.id = i
-                markers.markers.append(marker)
-        self.prev_num_detections = len(detection_array.detections)
 
         self.pub_markers.publish(markers)
 
